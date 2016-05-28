@@ -1,0 +1,590 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android,wifi," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="这个问题一开始报过来只有Wi-Fi启动失败具体表现为点击开关，一直没反应，重复开启也没用，重启后正常之前比较常见的是system image和boot image版本不匹配导致kernel无法加载wifi驱动但是从当前问题的log看不是上面的情况，有效log不足以定位具体异常代码，又不知道复现步骤无从下手，怎么办？先来了解一下Wi-Fi的代码架构
+Wi-Fi ConstructionWi-Fi的整">
+<meta property="og:type" content="article">
+<meta property="og:title" content="系统Crash后Wi-Fi启动失败问题分析">
+<meta property="og:url" content="http://andkid.github.io/2016/05/20/系统Crash后Wi-Fi启动失败问题分析/index.html">
+<meta property="og:site_name" content="AndKid">
+<meta property="og:description" content="这个问题一开始报过来只有Wi-Fi启动失败具体表现为点击开关，一直没反应，重复开启也没用，重启后正常之前比较常见的是system image和boot image版本不匹配导致kernel无法加载wifi驱动但是从当前问题的log看不是上面的情况，有效log不足以定位具体异常代码，又不知道复现步骤无从下手，怎么办？先来了解一下Wi-Fi的代码架构
+Wi-Fi ConstructionWi-Fi的整">
+<meta property="og:image" content="http://andkid.github.io/uploads/wifi_structure.png">
+<meta property="og:updated_time" content="2016-05-28T08:21:58.791Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="系统Crash后Wi-Fi启动失败问题分析">
+<meta name="twitter:description" content="这个问题一开始报过来只有Wi-Fi启动失败具体表现为点击开关，一直没反应，重复开启也没用，重启后正常之前比较常见的是system image和boot image版本不匹配导致kernel无法加载wifi驱动但是从当前问题的log看不是上面的情况，有效log不足以定位具体异常代码，又不知道复现步骤无从下手，怎么办？先来了解一下Wi-Fi的代码架构
+Wi-Fi ConstructionWi-Fi的整">
+<meta name="twitter:image" content="http://andkid.github.io/uploads/wifi_structure.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 系统Crash后Wi-Fi启动失败问题分析 | AndKid </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AndKid</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                系统Crash后Wi-Fi启动失败问题分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-20T05:48:38+00:00" content="2016-05-20">
+              2016-05-20
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这个问题一开始报过来只有Wi-Fi启动失败<br>具体表现为点击开关，一直没反应，重复开启也没用，重启后正常<br>之前比较常见的是system image和boot image版本不匹配导致kernel无法加载wifi驱动<br>但是从当前问题的log看不是上面的情况，有效log不足以定位具体异常代码，又不知道复现步骤<br>无从下手，怎么办？<br>先来了解一下Wi-Fi的代码架构</p>
+<h2 id="Wi-Fi-Construction"><a href="#Wi-Fi-Construction" class="headerlink" title="Wi-Fi Construction"></a>Wi-Fi Construction</h2><p><img src="/uploads/wifi_structure.png" alt="Wi-Fi架构图"><br>Wi-Fi的整体通信架构非常简单，在android系统服务中也很典型<br>大体就是</p>
+<ol>
+<li>Appication通过WifiManager和System Server进程中的wifi service通信  </li>
+<li>wifi service再通过socket和native进程wpa_supplicant通信  </li>
+<li>最后由wpa_supplicant向驱动发送命令  </li>
+</ol>
+<p>其中第一步IPC不管AsyncChannel还是AIDL都是通过Binder实现的<br>我理解各种IPC方式的关系是这样的  </p>
+<ul>
+<li>Binder是以方法调用的形式进行IPC</li>
+<li>AIDL封装Binder省去Binder的固定写法</li>
+<li>Messenger是基于AIDL实现以发消息的形式进行IPC</li>
+<li>AsyncChannel封装了Messenger  </li>
+</ul>
+<p>Messenger和AIDL结合Service的使用模板可以参考我的<a href="https://andkid.github.io/2015/10/15/service/">这篇文章</a></p>
+<p>第二步socket通信的具体代码在wifi.c的wifi_connect_on_socket_path函数<br>其创建了两个socket，一个用于向wpa_supplicant发消息，另一个用于监听wpa_supplicant的消息</p>
+<h2 id="Analysis-Procedure"><a href="#Analysis-Procedure" class="headerlink" title="Analysis Procedure"></a>Analysis Procedure</h2><h3 id="log分析"><a href="#log分析" class="headerlink" title="log分析"></a>log分析</h3><p>从log中能看到异常的是这句<br><code>Failed to start supplicant!</code><br>结合代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">InitialState</span> <span class="keyword">extends</span> <span class="title">State</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">enter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        WifiNative.stopHal();</span><br><span class="line">        mWifiNative.unloadDriver();</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">processMessage</span><span class="params">(Message message)</span> </span>&#123;</span><br><span class="line">        logStateAndMessage(message, getClass().getSimpleName());</span><br><span class="line">        <span class="keyword">switch</span> (message.what) &#123;</span><br><span class="line">            <span class="keyword">case</span> CMD_START_SUPPLICANT:</span><br><span class="line">                <span class="keyword">if</span> (mWifiNative.loadDriver()) &#123;</span><br><span class="line">                    ...</span><br><span class="line">                   <span class="comment">/* Stop a running supplicant after a runtime restart</span><br><span class="line">                    * Avoids issues with drivers that do not handle interface down</span><br><span class="line">                    * on a running supplicant properly.</span><br><span class="line">                    */</span></span><br><span class="line">                    mWifiMonitor.killSupplicant(mP2pSupported);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (WifiNative.startHal() == <span class="keyword">false</span>) &#123;</span><br><span class="line">                        <span class="comment">/* starting HAL is optional */</span></span><br><span class="line">                        loge(&amp;quot;Failed to start HAL&amp;quot;);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (mWifiNative.startSupplicant(mP2pSupported)) &#123;</span><br><span class="line">                        setWifiState(WIFI_STATE_ENABLING);</span><br><span class="line">                        <span class="keyword">if</span> (DBG) log(&amp;quot;Supplicant start successful&amp;quot;);</span><br><span class="line">                        mWifiMonitor.startMonitoring();</span><br><span class="line">                        transitionTo(mSupplicantStartingState);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        loge(&amp;quot;Failed to start supplicant!&amp;quot;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    loge(&amp;quot;Failed to load driver&amp;quot;);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure></p>
+<p>我刚才说的比较常见的驱动加载失败的情况，应该是打出<code>Failed to load driver</code>这句log<br>而现在可以看出是startSupplicant失败了<br>看到这就比较疑惑了，驱动已经加载成功了，而startSupplicant又是启动wifi的必经之路，不会有问题才对<br>再结合上下文看到之前有系统异常重启的log，注意，这儿的重启仅仅是zygote进程重新启动不是整个系统reboot<br>很开心，丢给导致system crash的模块负责人就完事了^_^</p>
+<h3 id="场景分析"><a href="#场景分析" class="headerlink" title="场景分析"></a>场景分析</h3><h4 id="模拟system-crash"><a href="#模拟system-crash" class="headerlink" title="模拟system crash"></a>模拟system crash</h4><p>很显然，这个问题还没有结束，不能每次system crash就会导致wifi开启不了吧<br>从log可以看到system crash前wifi是处于开启状态的<br>打开wifi，利用<code>adb shell stop;adb shell start</code>来模拟system crash看会不会发生异常<br>很遗憾，并没有发生异常，wifi开启非常顺利<br>但是，log依然包含<code>Failed to start supplicant!</code><br>至少能知道，在system crash后startSupplicant肯定是存在问题的，和复现的场景差别在哪<br>差别在scan always的设置，即StaDisabledWithScanState</p>
+<h4 id="Wi-Fi的StaDisabledWithScanState状态"><a href="#Wi-Fi的StaDisabledWithScanState状态" class="headerlink" title="Wi-Fi的StaDisabledWithScanState状态"></a>Wi-Fi的StaDisabledWithScanState状态</h4><p>介绍一下wifi的StaDisabledWithScanState<br>该状态下即使Settings里面wifi开关关闭，wpa_supplicant进程已然存在，以便向第三方应用提供扫描结果<br>刚才没有复现，是因为虽然一开始失败了，但是由于scan always开启，所以后续还有一次startSupplicant动作并成功了<br>关闭该设置开关，Location-&gt;menu-&gt;scan-&gt;Wi-Fi scanning<br>再次尝试<code>adb shell stop;adb shell start</code><br>问题复现了！<br>这儿来解释一个问题，为什么打开scan always后续执行一次startSupplicant能成功而出现异常情况多次点击开关都无效<br>原因是出现异常情况WifiController的状态机进入了StaEnabledState，即便点击开关也走不到startSupplicant</p>
+<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><p>回顾刚才WifiStateMachine的代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Stop a running supplicant after a runtime restart</span><br><span class="line"> * Avoids issues with drivers that do not handle interface down</span><br><span class="line"> * on a running supplicant properly.</span><br><span class="line"> */</span></span><br><span class="line"> mWifiMonitor.killSupplicant(mP2pSupported);</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> (mWifiNative.startSupplicant(mP2pSupported)) &#123;</span><br><span class="line">     setWifiState(WIFI_STATE_ENABLING);</span><br><span class="line">     <span class="keyword">if</span> (DBG) log(&amp;quot;Supplicant start successful&amp;quot;);</span><br><span class="line">     mWifiMonitor.startMonitoring();</span><br><span class="line">     transitionTo(mSupplicantStartingState);</span><br><span class="line"> &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">     loge(&amp;quot;Failed to start supplicant!&amp;quot;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这儿的逻辑是先<code>killSupplicant</code>然后<code>startSupplicant</code></p>
+<h4 id="killSupplicant"><a href="#killSupplicant" class="headerlink" title="killSupplicant"></a>killSupplicant</h4><p>最终走到wifi.c的wifi_stop_supplicant<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">wifi_stop_supplicant</span><span class="params">(<span class="keyword">int</span> p2p_supported)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">...</span><br><span class="line">    property_set(&amp;quot;ctl.stop&amp;quot;, supplicant_name); <span class="comment">//通过设置ctl.stop的系统属性来启动supplicant</span></span><br><span class="line">    sched_yield();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (count-- &amp;gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (property_get(supplicant_prop_name, supp_status, NULL)) &#123; <span class="comment">//stop成功后supplicant_prop_name也就是init.svc.p2p_supplicant对应的value会被设为stopped</span></span><br><span class="line">            <span class="keyword">if</span> (strcmp(supp_status, &amp;quot;stopped&amp;quot;) == <span class="number">0</span>) <span class="comment">//此处没加块括号</span></span><br><span class="line">                wifi_stop_fstman(<span class="number">0</span>); <span class="comment">//高通工程师添加了该语句却没在上面的if后加块括号</span></span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">//导致即使if判断为false也会return</span></span><br><span class="line">        &#125;</span><br><span class="line">        usleep(<span class="number">100000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="startSupplicant"><a href="#startSupplicant" class="headerlink" title="startSupplicant"></a>startSupplicant</h4><p>最终走到wifi.c的wifi_start_supplicant<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">wifi_start_supplicant</span><span class="params">(<span class="keyword">int</span> p2p_supported)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">...</span><br><span class="line">    property_set(&amp;quot;ctl.start&amp;quot;, supplicant_name); <span class="comment">//通过设置ctl.start的系统属性启动supplicant</span></span><br><span class="line">    sched_yield(); <span class="comment">//这句大致意思是降低本进程执行优先级，为了让上面的流程能先处理，因为现在后续的动作就是等supplicant启动了</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (count-- &amp;gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (pi == NULL) &#123;</span><br><span class="line">            pi = __system_property_find(supplicant_prop_name); <span class="comment">//和stop对应，start supplicant成功后会设init.svc.p2p_supplicant为running</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (pi != NULL) &#123;</span><br><span class="line">            <span class="comment">/*</span><br><span class="line">             * property serial updated means that init process is scheduled</span><br><span class="line">             * after we sched_yield, further property status checking is based on this */</span></span><br><span class="line">            <span class="keyword">if</span> (__system_property_serial(pi) != serial) &#123; <span class="comment">//每当一个system_proper被修改后，其对应的serial也会修改，这儿就是start失败的关键点了，</span></span><br><span class="line">                                                          <span class="comment">//注意，当执行到这儿，上一次的stop动作还没完成！！！</span></span><br><span class="line">                __system_property_read(pi, NULL, supp_status); <span class="comment">//所以，当serial改变实际上是上一次stop的动作触发的，而init.svc.p2p_supplicant是会被设为stopped</span></span><br><span class="line">                <span class="keyword">if</span> (strcmp(supp_status, &amp;quot;running&amp;quot;) == <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (strcmp(supp_status, &amp;quot;stopped&amp;quot;) == <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> -<span class="number">1</span>; <span class="comment">//之后就执行到这儿，返回失败！！！</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        usleep(<span class="number">100000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>给if语句块加上大括号<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (strcmp(supp_status, &amp;quot;stopped&amp;quot;) == <span class="number">0</span>) &#123;</span><br><span class="line">    wifi_stop_fstman(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/wifi/" rel="tag">#wifi</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/26/mov2pic_client/" rel="next" title="Mov2pic Client Introduction">
+                <i class="fa fa-chevron-left"></i> Mov2pic Client Introduction
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/me.jpg"
+               alt="AndKid" />
+          <p class="site-author-name" itemprop="name">AndKid</p>
+          <p class="site-description motion-element" itemprop="description">Try To Catch Up With Da Shen!</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AndKid" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Wi-Fi-Construction"><span class="nav-number">1.</span> <span class="nav-text">Wi-Fi Construction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Analysis-Procedure"><span class="nav-number">2.</span> <span class="nav-text">Analysis Procedure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#log分析"><span class="nav-number">2.1.</span> <span class="nav-text">log分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#场景分析"><span class="nav-number">2.2.</span> <span class="nav-text">场景分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模拟system-crash"><span class="nav-number">2.2.1.</span> <span class="nav-text">模拟system crash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Wi-Fi的StaDisabledWithScanState状态"><span class="nav-number">2.2.2.</span> <span class="nav-text">Wi-Fi的StaDisabledWithScanState状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析"><span class="nav-number">2.3.</span> <span class="nav-text">代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#killSupplicant"><span class="nav-number">2.3.1.</span> <span class="nav-text">killSupplicant</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#startSupplicant"><span class="nav-number">2.3.2.</span> <span class="nav-text">startSupplicant</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">3.</span> <span class="nav-text">解决方案</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndKid</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

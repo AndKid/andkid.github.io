@@ -1,0 +1,619 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android,wifi," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="WIFI Architecture Overview
+Wi-Fi(Wireless Fidelity)是一个无线网络通信技术的品牌，由Wi-Fi联盟（Wi-Fi Alliance，缩写为WFA）拥有。WFA专门负责Wi-Fi认证与商标授权工作。严格地说，Wi-Fi是一个认证的名称，该认证用于测试无线网络设备是否符合IEEE802.11系列协议规范。通过该认证的设备将被授予一个名为Wi-Fi CER">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Wi-Fi Introduction">
+<meta property="og:url" content="http://andkid.github.io/2015/11/28/wifi/index.html">
+<meta property="og:site_name" content="AndKid">
+<meta property="og:description" content="WIFI Architecture Overview
+Wi-Fi(Wireless Fidelity)是一个无线网络通信技术的品牌，由Wi-Fi联盟（Wi-Fi Alliance，缩写为WFA）拥有。WFA专门负责Wi-Fi认证与商标授权工作。严格地说，Wi-Fi是一个认证的名称，该认证用于测试无线网络设备是否符合IEEE802.11系列协议规范。通过该认证的设备将被授予一个名为Wi-Fi CER">
+<meta property="og:updated_time" content="2016-05-28T08:21:58.791Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Wi-Fi Introduction">
+<meta name="twitter:description" content="WIFI Architecture Overview
+Wi-Fi(Wireless Fidelity)是一个无线网络通信技术的品牌，由Wi-Fi联盟（Wi-Fi Alliance，缩写为WFA）拥有。WFA专门负责Wi-Fi认证与商标授权工作。严格地说，Wi-Fi是一个认证的名称，该认证用于测试无线网络设备是否符合IEEE802.11系列协议规范。通过该认证的设备将被授予一个名为Wi-Fi CER">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android Wi-Fi Introduction | AndKid </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AndKid</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android Wi-Fi Introduction
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-28T12:06:33+00:00" content="2015-11-28">
+              2015-11-28
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="WIFI-Architecture-Overview"><a href="#WIFI-Architecture-Overview" class="headerlink" title="WIFI Architecture Overview"></a>WIFI Architecture Overview</h1><blockquote>
+<p>Wi-Fi(Wireless Fidelity)是一个无线网络通信技术的品牌，由Wi-Fi联盟（Wi-Fi Alliance，缩写为WFA）拥有。<br>WFA专门负责Wi-Fi认证与商标授权工作。严格地说，Wi-Fi是一个认证的名称，该认证用于测试无线网络设备是否符合IEEE802.11系列协议规范。<br>通过该认证的设备将被授予一个名为Wi-Fi CERTIFIED的商标，其目的就是为了保证无线设备之间的互通性。<br>不过，随着获得Wi-Fi认证设备的普及，人们也就习以为常地称无线网络为Wi-Fi网络了。</p>
+</blockquote>
+<hr>
+<h2 id="相关名词解释"><a href="#相关名词解释" class="headerlink" title="相关名词解释"></a>相关名词解释</h2><ul>
+<li>LAN(Local Area Network)：局域网，是路由和主机组成的内部局域网，一般为有线网络</li>
+<li>WAN(Wild Area Network)：广域网，是外部一个更大的局域网</li>
+<li>WLAN(Wireless Local Area Network)：无线局域网，指应用无线通信技术将计算机设备互联起来，构成可以互相通信和实现资源共享的网络体系</li>
+<li>IEEE802.11协议规范：由IEEE协会针对无线局域网通信在网络通信协议层中的MAC(Media Access Control)和PHY(Physical Layer)两层制定的规范</li>
+<li>AP（Access Point）：无线访问接入点，将各个无线网络客户端连接到一起并接入以太网</li>
+<li>SSID：标识一个无线网络</li>
+<li>Band：频率范围，一般ap支持5g或2.4g两个频率范围的无线信号</li>
+<li>Channel：信道，对频段的进一步划分</li>
+<li>Channel Width：信道宽度，即信道带宽，影响吞吐量</li>
+<li>RTS/CTS：通信握手协议，一旦待传送数据大于设置的上限字节数就启动该协议，以解决“隐藏终端”问题</li>
+<li>WPA/EAP：加密认证协议</li>
+<li>RSSI(Receive Signal Strength Indication)：接收信号强度指示，反映了无线网络质量的好坏</li>
+</ul>
+<hr>
+<h2 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h2><h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3><p>/packages/apps/Settings/wifi</p>
+<ul>
+<li><p>WifiSettings.java<br>  用户对wifi功能的直接控制，触发相关流程开启，包括wifi启用/关闭，连接/断开，扫描等；<br>  通过注册receiver接收底层上传的wifi状态变化消息，并在UI上体现出来。</p>
+</li>
+<li><p>WifiEnable.java<br>  通过控制switch bar，调用WifiManager对应接口发送命令给底层。</p>
+</li>
+</ul>
+<hr>
+<h3 id="Framework层"><a href="#Framework层" class="headerlink" title="Framework层"></a>Framework层</h3><p>/frameworks/opt/net/wifi/service<br>/frameworks/base/wifi/java/android/net/wifi</p>
+<ul>
+<li><p>WifiManager.java<br>  Wifi Client端提供了管理wifi连接的主要接口，通过<code>Context.getSystemService(Context.WIFI_SERVICE)</code>获得实例。<br>  用于管理已配置的网络列表，获取当前处于连接状态的网络信息。</p>
+</li>
+<li><p>WifiServiceImpl.java<br>  实现了WifiManager对wifi远程操作的请求。Framework层的核心控制类。</p>
+</li>
+<li><p>WifiStateMachine.java<br>  跟踪wifi连接状态，初始化各wifi状态并处理相应的事件。<br>  wifi支持三种模式：Client，SoftAp和p2p，WifiStateMachine处理Client和SoftAp的动作，WifiP2pService处理p2p的动作。</p>
+</li>
+<li><p>WifiMonitor.java<br>  监听wpa_supplicant服务端的事件并传递给相应StateMachine处理。</p>
+</li>
+<li><p>WifiNative.java<br>  调用本地方法启用/终止wpa_supplicant守护进程并向其发送请求。<br>  WifiMonitor监听wpa_supplicant事件的线程调用了WifiNative的<code>waitForEvent()</code>方法。</p>
+</li>
+<li><p>com_android_server_wifi_WifiNative.cpp<br>  通过JNI调用本地函数，实现了对wpa_supplicant硬件抽象层函数调用的封装。</p>
+</li>
+</ul>
+<hr>
+<h3 id="HAL层"><a href="#HAL层" class="headerlink" title="HAL层"></a>HAL层</h3><p>/hardware/libhardware_legacy/wifi/</p>
+<ul>
+<li>wifi.c<br>  wifi硬件抽象层部分，与wpa_supplicant守护进程通信，实现了驱动加载、wpa_supplicant启动、命令发送、消息监听等功能。<br>  通过insmod加载驱动，通过android属性系统的<code>property_set(&quot;ctl.start&quot;, supplicant_name)</code>启动wpa_supplicant，<br>  通过包含wpa_ctrl.h头文件函数实现wpa_ctrl_request发送命令等功能与wpa_supplicant通信。</li>
+</ul>
+<hr>
+<h3 id="wpa-supplicant"><a href="#wpa-supplicant" class="headerlink" title="wpa_supplicant"></a>wpa_supplicant</h3><p>/external/wpa_supplicant_8/</p>
+<ul>
+<li>wpa_ctrl.c<br>  提供给外部程序与wpa_supplicant进程通信的接口，由socket实现跨进程通信。<br>  主要方法有wpa_ctrl_open()打开连接，wpa_ctrl_request()发送命令，wpa_ctrl_recv()接收消息。  </li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/wifi/" rel="tag">#wifi</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/01/android-memory/" rel="next" title="Android Memory">
+                <i class="fa fa-chevron-left"></i> Android Memory
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/02/wifi_framework/" rel="prev" title="Android Wi-Fi Framework">
+                Android Wi-Fi Framework <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/me.jpg"
+               alt="AndKid" />
+          <p class="site-author-name" itemprop="name">AndKid</p>
+          <p class="site-description motion-element" itemprop="description">Try To Catch Up With Da Shen!</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AndKid" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#WIFI-Architecture-Overview"><span class="nav-number">1.</span> <span class="nav-text">WIFI Architecture Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关名词解释"><span class="nav-number">1.1.</span> <span class="nav-text">相关名词解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码结构"><span class="nav-number">1.2.</span> <span class="nav-text">代码结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用层"><span class="nav-number">1.2.1.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Framework层"><span class="nav-number">1.2.2.</span> <span class="nav-text">Framework层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HAL层"><span class="nav-number">1.2.3.</span> <span class="nav-text">HAL层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wpa-supplicant"><span class="nav-number">1.2.4.</span> <span class="nav-text">wpa_supplicant</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndKid</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

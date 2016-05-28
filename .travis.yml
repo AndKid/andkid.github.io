@@ -14,7 +14,7 @@ before_install:
 - cp .travis/ssh_config ~/.ssh/config
 - git config --global user.name 'AndKid'
 - git config --global user.email cygcloud@163.com
-- git clone -b temp git@github.com:AndKid/andkid.github.io.git .deploy_git
+- git clone -b master git@github.com:AndKid/andkid.github.io.git .deploy_git
 
 install:
 - npm install hexo-cli -g

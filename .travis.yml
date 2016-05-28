@@ -1,0 +1,30 @@
+language: node_js
+
+nod_js:
+    - 'stable'
+
+sudo: false
+
+before_install:
+- openssl aes-256-cbc -K $encrypted_26b4962af0e7_key -iv $encrypted_26b4962af0e7_iv
+  -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d
+- chmod 600 ~/.ssh/id_rsa
+- eval $(ssh-agent)
+- ssh-add ~/.ssh/id_rsa
+- cp .travis/ssh_config ~/.ssh/config
+- git config --global user.name 'AndKid'
+- git config --global user.email cygcloud@163.com
+- git clone -b temp git@github.com:AndKid/andkid.github.io.git .deploy_git
+
+install:
+- npm install hexo-cli -g
+- npm install
+
+script:
+- hexo clean
+- hexo g
+- hexo d
+
+branches:
+  only:
+  - blog

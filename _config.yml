@@ -70,5 +70,5 @@ theme: next
 deploy:
   type: git
   repo: git@github.com:AndKid/andkid.github.io.git
-  branch: master1
+  branch: temp
   message: Auto Build From Travis CI

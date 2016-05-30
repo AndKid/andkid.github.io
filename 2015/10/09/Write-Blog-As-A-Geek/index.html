@@ -108,7 +108,7 @@ GitHub使用GitHub访问并注册github
 创建一个repo，命名为xxxx.github.io，这么命名是为了到时可直接当成域名访问
 关联到本地下载并安装Git
 打开Git Bash，利用SSH关联github网站，这样每次本地修改需要同步到服务器就很方便，不用每次都输密码需要注意的是，git">
-<meta property="og:updated_time" content="2016-05-28T11:30:51.000Z">
+<meta property="og:updated_time" content="2016-05-30T00:02:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Write Blog As A Geek">
 <meta name="twitter:description" content="如何构建类似本站的博客框架，主要有三个部分组成
@@ -310,9 +310,9 @@ GitHub使用GitHub访问并注册github
 <p>打开Git Bash，利用<a href="https://help.github.com/categories/ssh/" target="_blank" rel="external">SSH</a>关联github网站，这样每次本地修改需要同步到服务器就很方便，不用每次都输密码<br>需要注意的是，git clone的时候用的是<code>git@github.com:AndKid/andkid.github.io.git</code>，而不是https打头的地址</p>
 <h1 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="http://wiki.jikexueyuan.com/project/hexo-document/" target="_blank" rel="external">Hexo帮助文档</a><br>先安装<a href="https://nodejs.org/" target="_blank" rel="external">Node.js</a>，也可从我的<a href="http://pan.baidu.com/s/1i4gai4t" target="_blank" rel="external">网盘</a>下载<br>安装完成后执行命令</p>
 <pre><code>npm install -g hexo-cli
-</code></pre><h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hexo init xx  初始化一个网站目录</span><br><span class="line">hexo install  安装package.json指定的插件</span><br><span class="line">hexo new xx   创建博文</span><br><span class="line">hexo generate 生成静态网站，可简写成hexo g</span><br><span class="line">hexo deploy   部署到服务器，可简写成hexo d</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">hexo init xx  初始化一个网站目录</span><br><span class="line">cd xx</span><br><span class="line">npm install  安装package.json指定的插件</span><br><span class="line">hexo new xxx   创建博文</span><br><span class="line">hexo generate 生成静态网站，可简写成hexo g</span><br><span class="line">hexo deploy   部署到服务器，可简写成hexo d</span><br></pre></td></tr></table></figure>
 <p>部署成功后就能通过<code>xxxx.github.io</code>访问了</p>
-<p>在不执行<code>hexo deploy</code>部署到远程服务器的情况下，也是可以通过执行</p>
+<p>在不执行<code>hexo deploy</code>部署到远程服务器的情况下，也是可以通过执行本地建站</p>
 <pre><code>hexo server
 </code></pre><p>通过localhost:4000进行本地访问</p>
 <h2 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml</span><br><span class="line">├── package.json</span><br><span class="line">├── scaffolds</span><br><span class="line">├── source</span><br><span class="line">|   ├── _posts</span><br><span class="line">└── themes</span><br></pre></td></tr></table></figure>

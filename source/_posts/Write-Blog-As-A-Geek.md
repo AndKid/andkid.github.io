@@ -33,15 +33,17 @@ tags:
 
 ## 基本使用
 ```
+
 hexo init xx  初始化一个网站目录
-hexo install  安装package.json指定的插件
-hexo new xx   创建博文
+cd xx
+npm install  安装package.json指定的插件
+hexo new xxx   创建博文
 hexo generate 生成静态网站，可简写成hexo g
 hexo deploy   部署到服务器，可简写成hexo d
 ```
 部署成功后就能通过`xxxx.github.io`访问了
 
-在不执行`hexo deploy`部署到远程服务器的情况下，也是可以通过执行
+在不执行`hexo deploy`部署到远程服务器的情况下，也是可以通过执行本地建站
 
     hexo server
 通过localhost:4000进行本地访问

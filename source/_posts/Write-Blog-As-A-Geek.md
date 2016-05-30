@@ -33,7 +33,6 @@ tags:
 
 ## 基本使用
 ```
-
 hexo init xx  初始化一个网站目录
 cd xx
 npm install  安装package.json指定的插件
@@ -65,13 +64,19 @@ source存放md文件，也就是博文内容
 更换[主题](http://hexo.io/themes/)
 
 node_modules下是package.json指定的一些插件，如`hexo-deployer-git`
-修改lib/deploy.js
+
+~~修改lib/deploy.js~~
 
     + var sourceDir = this.source_dir;
     ...
     - return fs.copyDir(publicDir, deployDir)
     + return (fs.copyDir(publicDir, deployDir) && fs.copyDir(sourceDir, deployDir));
-可将source目录下的md文档一同部署到服务器，以便异地编辑
+~~可将source目录下的md文档一同部署到服务器，以便异地编辑~~  
+上述方法虽然可异地编辑md文档，但是并不能实时部署到博客  
+之后会介绍何如利用和github关联的Travis CI自动编译服务来完成以下动作：  
+  1. 我们向blog分支（md文档以及资源）push文档
+  2. github向作为Web Service的Travis CI发送消息告知有新消息
+  3. Travis CI立马安排编译并将结果push回github的master分支（html静态博客）
 
 # Markdown
 [markdown](https://guides.github.com/features/mastering-markdown/)

@@ -108,7 +108,7 @@ GitHub使用GitHub访问并注册github
 创建一个repo，命名为xxxx.github.io，这么命名是为了到时可直接当成域名访问
 关联到本地下载并安装Git
 打开Git Bash，利用SSH关联github网站，这样每次本地修改需要同步到服务器就很方便，不用每次都输密码需要注意的是，git">
-<meta property="og:updated_time" content="2016-05-30T00:02:50.000Z">
+<meta property="og:updated_time" content="2016-05-30T00:14:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Write Blog As A Geek">
 <meta name="twitter:description" content="如何构建类似本站的博客框架，主要有三个部分组成
@@ -310,7 +310,7 @@ GitHub使用GitHub访问并注册github
 <p>打开Git Bash，利用<a href="https://help.github.com/categories/ssh/" target="_blank" rel="external">SSH</a>关联github网站，这样每次本地修改需要同步到服务器就很方便，不用每次都输密码<br>需要注意的是，git clone的时候用的是<code>git@github.com:AndKid/andkid.github.io.git</code>，而不是https打头的地址</p>
 <h1 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="http://wiki.jikexueyuan.com/project/hexo-document/" target="_blank" rel="external">Hexo帮助文档</a><br>先安装<a href="https://nodejs.org/" target="_blank" rel="external">Node.js</a>，也可从我的<a href="http://pan.baidu.com/s/1i4gai4t" target="_blank" rel="external">网盘</a>下载<br>安装完成后执行命令</p>
 <pre><code>npm install -g hexo-cli
-</code></pre><h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">hexo init xx  初始化一个网站目录</span><br><span class="line">cd xx</span><br><span class="line">npm install  安装package.json指定的插件</span><br><span class="line">hexo new xxx   创建博文</span><br><span class="line">hexo generate 生成静态网站，可简写成hexo g</span><br><span class="line">hexo deploy   部署到服务器，可简写成hexo d</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hexo init xx  初始化一个网站目录</span><br><span class="line">cd xx</span><br><span class="line">npm install  安装package.json指定的插件</span><br><span class="line">hexo new xxx   创建博文</span><br><span class="line">hexo generate 生成静态网站，可简写成hexo g</span><br><span class="line">hexo deploy   部署到服务器，可简写成hexo d</span><br></pre></td></tr></table></figure>
 <p>部署成功后就能通过<code>xxxx.github.io</code>访问了</p>
 <p>在不执行<code>hexo deploy</code>部署到远程服务器的情况下，也是可以通过执行本地建站</p>
 <pre><code>hexo server
@@ -318,12 +318,18 @@ GitHub使用GitHub访问并注册github
 <h2 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml</span><br><span class="line">├── package.json</span><br><span class="line">├── scaffolds</span><br><span class="line">├── source</span><br><span class="line">|   ├── _posts</span><br><span class="line">└── themes</span><br></pre></td></tr></table></figure>
 <p><code>_config.yml</code>是网站的总配置文件，网站名，作者，远程服务器，主题等<br>themes是存放主题相关资源的地方，其也有配置文件，也可修改部分源码或资源达到修改目的<br>source存放md文件，也就是博文内容</p>
 <h2 id="其他使用"><a href="#其他使用" class="headerlink" title="其他使用"></a>其他使用</h2><p>更换<a href="http://hexo.io/themes/" target="_blank" rel="external">主题</a></p>
-<p>node_modules下是package.json指定的一些插件，如<code>hexo-deployer-git</code><br>修改lib/deploy.js</p>
+<p>node_modules下是package.json指定的一些插件，如<code>hexo-deployer-git</code></p>
+<p><del>修改lib/deploy.js</del></p>
 <pre><code>+ var sourceDir = this.source_dir;
 ...
 - return fs.copyDir(publicDir, deployDir)
 + return (fs.copyDir(publicDir, deployDir) &amp;&amp; fs.copyDir(sourceDir, deployDir));
-</code></pre><p>可将source目录下的md文档一同部署到服务器，以便异地编辑</p>
+</code></pre><p><del>可将source目录下的md文档一同部署到服务器，以便异地编辑</del><br>上述方法虽然可异地编辑md文档，但是并不能实时部署到博客<br>之后会介绍何如利用和github关联的Travis CI自动编译服务来完成以下动作：  </p>
+<ol>
+<li>我们向blog分支（md文档以及资源）push文档</li>
+<li>github向作为Web Service的Travis CI发送消息告知有新消息</li>
+<li>Travis CI立马安排编译并将结果push回github的master分支（html静态博客）</li>
+</ol>
 <h1 id="Markdown"><a href="#Markdown" class="headerlink" title="Markdown"></a>Markdown</h1><p><a href="https://guides.github.com/features/mastering-markdown/" target="_blank" rel="external">markdown</a><br>支持html语言</p>
 
       

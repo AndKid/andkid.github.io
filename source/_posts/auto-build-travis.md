@@ -9,7 +9,7 @@ tags:
 如果嫌弃要装太多工具，推荐一个免费在线IDE  
 https://c9.io/  
 ![Cloud9](/uploads/cloud9.png)  
-支持sudo shell，确定是出于安全考虑，只支持https协议访问，并不支持http协议  
+支持sudo shell，但是出于安全考虑，只支持https协议访问，并不支持http协议  
 所以在hexo博客搭好后，需要deploy到github验证  
 我注册的时候最后一步图片验证码显示不出来，翻墙后才正常，不确定是不是网络差的关系，总之，这儿顺便推荐个翻墙工具  
 https://github.com/getlantern/lantern  
@@ -22,7 +22,7 @@ https://github.com/getlantern/lantern
 这怎么能忍受的了！  
 
 ## 经典模式
-![Hexo Classic Workflow](/uploads/hexo_traditional_workflow.png)  
+![Hexo Classic Workflow](/uploads/hexo_classic_workflow.png)  
 经典模式的工作流程：  
 1. 在本地将修改后的markdown文档与github的blog分支进行同步
 2. github接收到提交后通知编译服务器Travis CI

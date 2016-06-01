@@ -2,6 +2,7 @@
 title: 自动编译服务Travis CI介绍
 date: 2016-05-30 16:00:01
 tags:
+- blog
 - build
 - github
 ---
@@ -97,14 +98,14 @@ gem是ruby的工具，不想安装可利用最上面提到的processon在线IDE
 `travis login --auto`
 利用github帐号登录，执行该命令后会告诉你放心登录，不会窃取你的密码～
 `travis encrypt-file id_rsa --add`
-执行后会自动在.travis.yml插入一行解密命令，如  
+执行后会自动在.travis.yml插入一行解密命令，Travis CI会执行它，如  
 `- openssl aes-256-cbc -K $encrypted_26b4962af0e7_key -iv $encrypted_26b4962af0e7_iv
   -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d`  
 注意这个是执行encrypt-file执行完后自动插入的，不要照抄，-in是encrypt-file加密后的.enc文件，这个文件就可以放心地放在项目中，我放在.travis目录下  
 
 ### 配置Travis CI SSH
 以上只是将公钥和私钥放置在了合适的位置  
-Travis CI在向github提交代码如何利用SSH附带私钥信息需要以下几步  
+Travis CI在向github提交代码如何利用SSH附带私钥信息呢，需要以下几步  
 ```yml
 - chmod 600 ~/.ssh/id_rsa
 - eval $(ssh-agent)
@@ -141,3 +142,7 @@ branches:
   - blog #监听blog分支改动的消息
 
 ```
+至此，配置已经完成，接下来只要往github的blog分支提交代码  
+Travis CI就会把静态博客部署到master分支  
+相关配置可参考 https://github.com/AndKid/andkid.github.io/tree/blog  
+Enjoy！

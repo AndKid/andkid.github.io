@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="build,github," />
+  <meta name="keywords" content="blog,build,github," />
 
 
 
@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://andkid.github.io/uploads/add_service.png">
 <meta property="og:image" content="http://andkid.github.io/uploads/travis_settings.png">
 <meta property="og:image" content="http://andkid.github.io/uploads/ssh_public_key.png">
-<meta property="og:updated_time" content="2016-06-01T12:25:55.000Z">
+<meta property="og:updated_time" content="2016-06-01T14:31:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自动编译服务Travis CI介绍">
 <meta name="twitter:description" content="Write-Blog-As-A-Geek这篇文章已经介绍了如何利用Hexo工具生成基于markdown的静态博客网站如果嫌弃要装太多工具，推荐一个免费在线IDEhttps://c9.io/支持sudo shell，但是出于安全考虑，只支持https协议访问，并不支持http协议所以在hexo博客搭好后，需要deploy到github验证我注册的时候最后一步图片验证码显示不出来，翻墙后才正常，不确定">
@@ -296,12 +296,13 @@
 <p>注意存放路径，不要覆盖Linux默认~/.ssh  </p>
 </blockquote>
 <h3 id="将公钥告知github"><a href="#将公钥告知github" class="headerlink" title="将公钥告知github"></a>将公钥告知github</h3><p>将public key放在github的blog的git中<br><img src="/uploads/ssh_public_key.png" alt="SSH Public Key">  </p>
-<h3 id="将私钥告知Travis-CI"><a href="#将私钥告知Travis-CI" class="headerlink" title="将私钥告知Travis CI"></a>将私钥告知Travis CI</h3><p>将private key告知Travis CI<br>当然，private key也不能明目张胆地保存在项目中<br>同样，我们需要利用SSH Key对这个private key进行加密，这次我们采用公钥加密，私钥解密的方式来传输隐私文件<br>这次我们不需要自己生成，因为Travis CI提供了命令工具来做这件事<br><code>gem install travis</code><br>gem是ruby的工具，不想安装可利用最上面提到的processon在线IDE<br><code>travis login --auto</code><br>利用github帐号登录，执行该命令后会告诉你放心登录，不会窃取你的密码～<br><code>travis encrypt-file id_rsa --add</code><br>执行后会自动在.travis.yml插入一行解密命令，如<br><code>- openssl aes-256-cbc -K $encrypted_26b4962af0e7_key -iv $encrypted_26b4962af0e7_iv
+<h3 id="将私钥告知Travis-CI"><a href="#将私钥告知Travis-CI" class="headerlink" title="将私钥告知Travis CI"></a>将私钥告知Travis CI</h3><p>将private key告知Travis CI<br>当然，private key也不能明目张胆地保存在项目中<br>同样，我们需要利用SSH Key对这个private key进行加密，这次我们采用公钥加密，私钥解密的方式来传输隐私文件<br>这次我们不需要自己生成，因为Travis CI提供了命令工具来做这件事<br><code>gem install travis</code><br>gem是ruby的工具，不想安装可利用最上面提到的processon在线IDE<br><code>travis login --auto</code><br>利用github帐号登录，执行该命令后会告诉你放心登录，不会窃取你的密码～<br><code>travis encrypt-file id_rsa --add</code><br>执行后会自动在.travis.yml插入一行解密命令，Travis CI会执行它，如<br><code>- openssl aes-256-cbc -K $encrypted_26b4962af0e7_key -iv $encrypted_26b4962af0e7_iv
   -in .travis/ssh_key.enc -out ~/.ssh/id_rsa -d</code><br>注意这个是执行encrypt-file执行完后自动插入的，不要照抄，-in是encrypt-file加密后的.enc文件，这个文件就可以放心地放在项目中，我放在.travis目录下  </p>
-<h3 id="配置Travis-CI-SSH"><a href="#配置Travis-CI-SSH" class="headerlink" title="配置Travis CI SSH"></a>配置Travis CI SSH</h3><p>以上只是将公钥和私钥放置在了合适的位置<br>Travis CI在向github提交代码如何利用SSH附带私钥信息需要以下几步<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> chmod <span class="number">600</span> ~/.ssh/id_rsa</span><br><span class="line"><span class="bullet">-</span> eval $(ssh-agent)</span><br><span class="line"><span class="bullet">-</span> ssh-add ~/.ssh/id_rsa</span><br><span class="line"><span class="bullet">-</span> cp .travis/ssh_config ~/.ssh/config</span><br></pre></td></tr></table></figure></p>
+<h3 id="配置Travis-CI-SSH"><a href="#配置Travis-CI-SSH" class="headerlink" title="配置Travis CI SSH"></a>配置Travis CI SSH</h3><p>以上只是将公钥和私钥放置在了合适的位置<br>Travis CI在向github提交代码如何利用SSH附带私钥信息呢，需要以下几步<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> chmod <span class="number">600</span> ~/.ssh/id_rsa</span><br><span class="line"><span class="bullet">-</span> eval $(ssh-agent)</span><br><span class="line"><span class="bullet">-</span> ssh-add ~/.ssh/id_rsa</span><br><span class="line"><span class="bullet">-</span> cp .travis/ssh_config ~/.ssh/config</span><br></pre></td></tr></table></figure></p>
 <p>ssh_config内容为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">  User git</span><br><span class="line">  StrictHostKeyChecking no</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa</span><br><span class="line">  IdentitiesOnly yes</span><br></pre></td></tr></table></figure></p>
 <p>至此，Travis CI向github提交时会用私钥加密  </p>
 <h3 id="travis-yml剩余命令"><a href="#travis-yml剩余命令" class="headerlink" title=".travis.yml剩余命令"></a>.travis.yml剩余命令</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> git config --global user.name <span class="string">'AndKid'</span> <span class="comment">#配置git提交时的用户名</span></span><br><span class="line"><span class="bullet">-</span> git config --global user.email cygcloud@<span class="number">163.</span>com <span class="comment">#配置git提交时的email</span></span><br><span class="line"><span class="bullet">-</span> git clone -b master git@github.com:AndKid/andkid.github.io.git .deploy_git <span class="comment">#将master分支clone到根目录，用于转换完成后merge并提交</span></span><br><span class="line"></span><br><span class="line"><span class="attr">install:</span></span><br><span class="line"><span class="bullet">-</span> npm install hexo-cli -g <span class="comment">#安装hexo</span></span><br><span class="line"><span class="bullet">-</span> npm install <span class="comment">#安装hexo插件，在package.json中指定</span></span><br><span class="line"></span><br><span class="line"><span class="attr">script:</span></span><br><span class="line"><span class="bullet">-</span> hexo clean <span class="comment">#清理环境</span></span><br><span class="line"><span class="bullet">-</span> hexo g <span class="comment">#生成静态html</span></span><br><span class="line"><span class="bullet">-</span> hexo d <span class="comment">#部署到github</span></span><br><span class="line"></span><br><span class="line"><span class="attr">branches:</span></span><br><span class="line"><span class="attr">  only:</span></span><br><span class="line"><span class="bullet">  -</span> blog <span class="comment">#监听blog分支改动的消息</span></span><br></pre></td></tr></table></figure>
+<p>至此，配置已经完成，接下来只要往github的blog分支提交代码<br>Travis CI就会把静态博客部署到master分支<br>相关配置可参考 <a href="https://github.com/AndKid/andkid.github.io/tree/blog" target="_blank" rel="external">https://github.com/AndKid/andkid.github.io/tree/blog</a><br>Enjoy！</p>
 
       
     </div>
@@ -322,6 +323,8 @@
     <footer class="post-footer">
       
         <div class="post-tags">
+          
+            <a href="/tags/blog/" rel="tag">#blog</a>
           
             <a href="/tags/build/" rel="tag">#build</a>
           

@@ -146,3 +146,7 @@ branches:
 Travis CI就会把静态博客部署到master分支  
 相关配置可参考 https://github.com/AndKid/andkid.github.io/tree/blog  
 Enjoy！
+
+参考文档：  
+http://www.v2ex.com/t/170462  
+https://zespia.tw/blog/2015/01/21/continuous-deployment-to-github-with-travis/

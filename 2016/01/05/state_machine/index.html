@@ -96,7 +96,7 @@
 状态机是一种设计模式，层级状态机是由多个有层次结构的状态构成，不同的状态处理各自能够处理的消息并实现相应功能。
 
 一个State需要实现processMessage以及三个可选enter/exit/getNameenter/exit类似构造和析构函数，用于State初始化和退出清除getName获得该State对象的名字，一种">
-<meta property="og:updated_time" content="2016-06-02T01:48:37.000Z">
+<meta property="og:updated_time" content="2016-09-12T13:07:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="StateMachine">
 <meta name="twitter:description" content="Hierarchy StateMachine Simple Guide
@@ -298,7 +298,7 @@ mS2     mS1 ------&gt; initialed state
 <hr>
 <p>切换状态时，exit/enter的执行顺序是从当前状态调用exit开始，直到与另一个状态的公共父节点，不包括公共父节点<br>然后开始调用公共父节下字节点到目标状态的所有状态的enter<br>如果没有公共父节点则退出所有状态然后重新进入  </p>
 <hr>
-<p>另外两个传递消息的方法是sendMessageAtFrontOfQueue和deferMessage<br>sendMessageAtFrontOfQueue是将消息放到消息队列头部<br>deferMessage是将消息延迟到下一个状态并放到消息队列头部<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Override <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">processMessage</span><span class="params">(Message message)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> retVal;</span><br><span class="line">    log(<span class="string">"mP1.processMessage what="</span> + message.what);</span><br><span class="line">    <span class="keyword">switch</span>(message.what) &#123;</span><br><span class="line">    <span class="keyword">case</span> CMD_2:</span><br><span class="line">        <span class="comment">// CMD_2 will arrive in mS2 before CMD_3</span></span><br><span class="line">        sendMessage(obtainMessage(CMD_3));</span><br><span class="line">        deferMessage(message);</span><br><span class="line">        transitionTo(mS2);</span><br><span class="line">        retVal = HANDLED;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="comment">// Any message we don't understand in this state invokes unhandledMessage</span></span><br><span class="line">        retVal = NOT_HANDLED;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> retVal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>另外两个传递消息的方法是sendMessageAtFrontOfQueue和deferMessage<br>sendMessageAtFrontOfQueue是将消息放到消息队列头部<br>deferMessage是将消息延迟到下一个状态并放到消息队列头部<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function">Override <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">processMessage</span><span class="params">(Message message)</span> </span>&#123;</div><div class="line">    <span class="keyword">boolean</span> retVal;</div><div class="line">    log(<span class="string">"mP1.processMessage what="</span> + message.what);</div><div class="line">    <span class="keyword">switch</span>(message.what) &#123;</div><div class="line">    <span class="keyword">case</span> CMD_2:</div><div class="line">        <span class="comment">// CMD_2 will arrive in mS2 before CMD_3</span></div><div class="line">        sendMessage(obtainMessage(CMD_3));</div><div class="line">        deferMessage(message);</div><div class="line">        transitionTo(mS2);</div><div class="line">        retVal = HANDLED;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">default</span>:</div><div class="line">        <span class="comment">// Any message we don't understand in this state invokes unhandledMessage</span></div><div class="line">        retVal = NOT_HANDLED;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> retVal;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>CMD_2和CMD_3都会在mS2中被处理，且CMD_2在CMD_3前被处理</p>
 
       
@@ -412,7 +412,7 @@ mS2     mS1 ------&gt; initialed state
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-count">19</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -422,7 +422,7 @@ mS2     mS1 ------&gt; initialed state
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

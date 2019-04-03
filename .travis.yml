@@ -20,7 +20,7 @@ install:
 #安装更新的一个软件
 - npm install n -g
 #更新到最新stable版本
-- n stable
+- sudo n stable
 - npm install hexo-cli -g
 - npm install
 

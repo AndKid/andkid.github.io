@@ -3,7 +3,7 @@ language: node_js
 nod_js:
     - 'stable'
 
-sudo: false
+sudo: true
 
 before_install:
 - openssl aes-256-cbc -K $encrypted_a86616fdbe0b_key -iv $encrypted_a86616fdbe0b_iv

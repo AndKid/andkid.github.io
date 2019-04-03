@@ -1,7 +1,7 @@
 language: node_js
 
 nod_js:
-    - 'stable'
+- stable
 
 sudo: false
 
@@ -18,7 +18,7 @@ before_install:
 
 install:
 - npm install hexo-cli -g
-#- npm install
+- npm install
 
 script:
 - hexo clean

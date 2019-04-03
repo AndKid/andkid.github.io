@@ -6,15 +6,15 @@
 
 
 <html class="theme-next mist use-motion">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -29,7 +29,7 @@
 
   
   
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -63,46 +63,39 @@
 
 
 
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="android,dump,shell," />
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="android,dump,shell,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1">
 
 
 
 
 
 
-<meta name="description" content="android在shell环境下执行的命令都对应相应的程序实现，下面讲的是如何获取命令对应输出。
-以adb shell dumpsys meminfo 【pid】为例
-
-注：以下两种方法都需要程序获得权限android.permission.DUMP，而且该 permission在 android.Manifest.permission中说明Allows an application to ret">
+<meta name="description" content="android在shell环境下执行的命令都对应相应的程序实现，下面讲的是如何获取命令对应输出。 以adb shell dumpsys meminfo 【pid】为例  注：以下两种方法都需要程序获得权限android.permission.DUMP，而且该 permission在 android.Manifest.permission中说明Allows an application to ret">
+<meta name="keywords" content="android,dump,shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android Dump">
 <meta property="og:url" content="http://andkid.github.io/2015/10/25/android-dump/index.html">
 <meta property="og:site_name" content="AndKid">
-<meta property="og:description" content="android在shell环境下执行的命令都对应相应的程序实现，下面讲的是如何获取命令对应输出。
-以adb shell dumpsys meminfo 【pid】为例
-
-注：以下两种方法都需要程序获得权限android.permission.DUMP，而且该 permission在 android.Manifest.permission中说明Allows an application to ret">
-<meta property="og:updated_time" content="2016-09-12T13:07:05.000Z">
+<meta property="og:description" content="android在shell环境下执行的命令都对应相应的程序实现，下面讲的是如何获取命令对应输出。 以adb shell dumpsys meminfo 【pid】为例  注：以下两种方法都需要程序获得权限android.permission.DUMP，而且该 permission在 android.Manifest.permission中说明Allows an application to ret">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-03T10:38:45.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Dump">
-<meta name="twitter:description" content="android在shell环境下执行的命令都对应相应的程序实现，下面讲的是如何获取命令对应输出。
-以adb shell dumpsys meminfo 【pid】为例
-
-注：以下两种方法都需要程序获得权限android.permission.DUMP，而且该 permission在 android.Manifest.permission中说明Allows an application to ret">
+<meta name="twitter:description" content="android在shell环境下执行的命令都对应相应的程序实现，下面讲的是如何获取命令对应输出。 以adb shell dumpsys meminfo 【pid】为例  注：以下两种方法都需要程序获得权限android.permission.DUMP，而且该 permission在 android.Manifest.permission中说明Allows an application to ret">
 
 
 
@@ -149,7 +142,7 @@
   
 
   <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <span class="site-title">AndKid</span>
       <span class="logo-line-after"><i></i></span>
@@ -176,7 +169,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -186,7 +179,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -196,7 +189,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -287,9 +280,9 @@
 </blockquote>
 <p>所以，需要将apk push到/system/priv-app/目录下。</p>
 <hr>
-<p>方法一,忽略该命令方法执行流程，利用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    Process p = Runtime.getRuntime().exec(<span class="string">"dumpsys meminfo "</span> + android.os.Process.myPid());</div><div class="line">    BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(p.getInputStream()));</div><div class="line">    String line = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">while</span>((line = br.readLine()) != <span class="keyword">null</span>) &#123;</div><div class="line">        System.out.println(line);</div><div class="line">    &#125;</div><div class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">    e.printStackTrace();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>方法一,忽略该命令方法执行流程，利用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Process p = Runtime.getRuntime().exec(<span class="string">"dumpsys meminfo "</span> + android.os.Process.myPid());</span><br><span class="line">    BufferedReader br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(p.getInputStream()));</span><br><span class="line">    String line = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span>((line = br.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        System.out.println(line);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <hr>
-<p>方法二，找到源码<code>frameworks/native/cmds/dumpsys/dumpsys.cpp</code><br>其中代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">sp&lt;IBinder&gt; service = sm-&gt;checkService(services[i]);</div><div class="line">获取dumpsys命令后对应的注册在ServiceManager中的服务，dumpsys meminfo就是 名字为meminfo的服务，可以用ServiceManager.getService(<span class="string">"meminfo"</span>)得到。</div><div class="line">此处service为Binder的代理对象，也就是说注册在ServiceManager中的服务是个 Binder对象，即 MemBinder，继承了Binder。</div><div class="line"><span class="keyword">int</span> err = service-&gt;dump(STDOUT_FILENO, args);</div><div class="line">这句就是调用了meminfo对应的MemBinder的Binder本地对象的dump方 法，MemBinder是在 ActivityManagerService中调用</div><div class="line">ServiceManager.addService(<span class="string">"meminfo"</span>, <span class="keyword">new</span> MemBinder(m))注册;</div><div class="line">参数STDOUT_FILENO是标准输出的fd，所以命令会输出到控制台窗口，args就是参 数【pid】等</div><div class="line">dump方法中会调用对应pid的ProcessRecord中描述Client应用程序 ApplicationThread的代理对象 thread方法</div><div class="line">thread.dumpMemInfo(fd, mi, isCheckinRequest, dumpFullDetails, dumpDalvik, innerArgs);</div></pre></td></tr></table></figure></p>
+<p>方法二，找到源码<code>frameworks/native/cmds/dumpsys/dumpsys.cpp</code><br>其中代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sp&lt;IBinder&gt; service = sm-&gt;checkService(services[i]);</span><br><span class="line">获取dumpsys命令后对应的注册在ServiceManager中的服务，dumpsys meminfo就是 名字为meminfo的服务，可以用ServiceManager.getService(<span class="string">"meminfo"</span>)得到。</span><br><span class="line">此处service为Binder的代理对象，也就是说注册在ServiceManager中的服务是个 Binder对象，即 MemBinder，继承了Binder。</span><br><span class="line"><span class="keyword">int</span> err = service-&gt;dump(STDOUT_FILENO, args);</span><br><span class="line">这句就是调用了meminfo对应的MemBinder的Binder本地对象的dump方 法，MemBinder是在 ActivityManagerService中调用</span><br><span class="line">ServiceManager.addService(<span class="string">"meminfo"</span>, <span class="keyword">new</span> MemBinder(m))注册;</span><br><span class="line">参数STDOUT_FILENO是标准输出的fd，所以命令会输出到控制台窗口，args就是参 数【pid】等</span><br><span class="line">dump方法中会调用对应pid的ProcessRecord中描述Client应用程序 ApplicationThread的代理对象 thread方法</span><br><span class="line">thread.dumpMemInfo(fd, mi, isCheckinRequest, dumpFullDetails, dumpDalvik, innerArgs);</span><br></pre></td></tr></table></figure></p>
 <p><em>注：需要调用Client应用程序(相对SystemServer而言)dumpMemInfo方法是因为一些用户空间内存信息Heap Size/Heap Alloc/Heap Free需要在本进程调用相应方法<br>综上流程，我们只要利用ServceManager.getService(“meminfo“)获得MemBinder代理对象再调用dump方法，第一个参数改成自己创建文件对应的FileDescriptor，<br>第二个参数new String[“[pid]”]即可。</em></p>
 <p><em>注：dumpsys meminfo命令需要添加权限，并push到priv-app目录，其他命令依具体情况而言。</em></p>
 
@@ -326,8 +319,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/10/18/android-messager/" rel="next" title="Android Messager">
-                <i class="fa fa-chevron-left"></i> Android Messager
+              <a href="/2015/10/18/android-camera/" rel="next" title="Android Camera">
+                <i class="fa fa-chevron-left"></i> Android Camera
               </a>
             
           </div>
@@ -384,7 +377,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -395,16 +388,14 @@
 
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/uploads/me.jpg"
-               alt="AndKid" />
+          <img class="site-author-image" itemprop="image" src="/uploads/me.jpg" alt="AndKid">
           <p class="site-author-name" itemprop="name">AndKid</p>
           <p class="site-description motion-element" itemprop="description">Try To Catch Up With Da Shen!</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -414,7 +405,7 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -470,10 +461,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

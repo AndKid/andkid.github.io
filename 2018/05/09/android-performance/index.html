@@ -1,0 +1,640 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="android,performance,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="网上研究性能问题的文章很多，有介绍原理的，有介绍分析工具的，有讲具体问题点的，还有一堆山寨的本文是在吸纳了所有的精髓后，总结的套路，旨在真正定位并解决性能问题   发现问题性能问题说白了，就是程序卡顿从而影响用户体验，而卡顿的直接原因就是掉帧在安卓上以FPS等于60（显示一帧的时间间隔16.7ms）为标准，低于这个标准即发生了掉帧可以从以下方式判断掉帧的严重程度，并以此来验证优化后的效果    从">
+<meta name="keywords" content="android,performance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓性能优化套路">
+<meta property="og:url" content="http://andkid.github.io/2018/05/09/android-performance/index.html">
+<meta property="og:site_name" content="AndKid">
+<meta property="og:description" content="网上研究性能问题的文章很多，有介绍原理的，有介绍分析工具的，有讲具体问题点的，还有一堆山寨的本文是在吸纳了所有的精髓后，总结的套路，旨在真正定位并解决性能问题   发现问题性能问题说白了，就是程序卡顿从而影响用户体验，而卡顿的直接原因就是掉帧在安卓上以FPS等于60（显示一帧的时间间隔16.7ms）为标准，低于这个标准即发生了掉帧可以从以下方式判断掉帧的严重程度，并以此来验证优化后的效果    从">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://andkid.github.io/uploads/profile_gpu_rendering_graph.png">
+<meta property="og:image" content="http://andkid.github.io/uploads/profile_gpu_rendering_graph_legend.png">
+<meta property="og:image" content="http://andkid.github.io/uploads/screen_capture_render_indicator_brands.png">
+<meta property="og:image" content="http://andkid.github.io/uploads/screen_capture_overdraw_brands.png">
+<meta property="og:image" content="http://andkid.github.io/uploads/screen_capture_layout_inspector_brands.png">
+<meta property="og:updated_time" content="2019-04-03T10:38:45.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓性能优化套路">
+<meta name="twitter:description" content="网上研究性能问题的文章很多，有介绍原理的，有介绍分析工具的，有讲具体问题点的，还有一堆山寨的本文是在吸纳了所有的精髓后，总结的套路，旨在真正定位并解决性能问题   发现问题性能问题说白了，就是程序卡顿从而影响用户体验，而卡顿的直接原因就是掉帧在安卓上以FPS等于60（显示一帧的时间间隔16.7ms）为标准，低于这个标准即发生了掉帧可以从以下方式判断掉帧的严重程度，并以此来验证优化后的效果    从">
+<meta name="twitter:image" content="http://andkid.github.io/uploads/profile_gpu_rendering_graph.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 安卓性能优化套路 | AndKid </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">AndKid</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                安卓性能优化套路
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-09T20:08:54+00:00" content="2018-05-09">
+              2018-05-09
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>网上研究性能问题的文章很多，有介绍原理的，有介绍分析工具的，有讲具体问题点的，还有一堆山寨的<br>本文是在吸纳了所有的精髓后，总结的套路，旨在真正定位并解决性能问题  </p>
+<h2 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h2><p>性能问题说白了，就是程序卡顿从而影响用户体验，而卡顿的直接原因就是掉帧<br>在安卓上以FPS等于60（显示一帧的时间间隔16.7ms）为标准，低于这个标准即发生了掉帧<br>可以从以下方式判断掉帧的严重程度，并以此来验证优化后的效果  </p>
+<ol>
+<li>从使用者角度明显感受到卡顿</li>
+<li>6.0以上的系统，通过开发者模式中“GPU呈现模式分析”的条形图来看，有大量帧时间超过绿线代表的16.7ms<br><img src="/uploads/profile_gpu_rendering_graph.png" alt></li>
+<li>6.0以上的系统，通过开发者模式中“GPU呈现模式分析”的gfxinfo选项，<br>通过命令<code>adb shell &quot;dumpsys gfxinfo com.fanli.android.apps reset&quot;</code>来获取两次命令之间的所有帧状态，<br>显示结果中的“Total frames rendered”和“Janky frames”可以看出掉帧率  </li>
+</ol>
+<h2 id="16-7ms内需要执行的任务"><a href="#16-7ms内需要执行的任务" class="headerlink" title="16.7ms内需要执行的任务"></a>16.7ms内需要执行的任务</h2><p>显示一帧图像到屏幕只有短短的16.7ms，期间CPU和GPU需要做很多事情，简单了解整个流程有助于针对性地找出影响各个阶段的耗时因素</p>
+<ul>
+<li>CPU做业务处理/响应用户输入<ul>
+<li>针对UI线程</li>
+</ul>
+</li>
+<li>measure/layout<ul>
+<li>在view创建或被listview/recycleview复用的时候会调用，滚动过程中不会调用</li>
+</ul>
+</li>
+<li>draw(create display list)<ul>
+<li>display list会被系统缓存起来，某些情况的transform/scroll/animation不会重建display list，即不会调draw，调invalidate会重新创建</li>
+</ul>
+</li>
+<li>upload image<ul>
+<li>将image从CPU拷贝到GPU</li>
+</ul>
+</li>
+<li>issue commands(将命令发送给GPU)<ul>
+<li>在将绘制命令发送给GPU前，对命令做一些变换和裁剪的修改</li>
+</ul>
+</li>
+<li>GPU做栅格化、复制图像缓冲等操作</li>
+</ul>
+<h2 id="各阶段耗时因素"><a href="#各阶段耗时因素" class="headerlink" title="各阶段耗时因素"></a>各阶段耗时因素</h2><p>每个阶段都有可能存在耗时因素，先简单列一下，下面会具体介绍典型因素及如何定位解决</p>
+<ul>
+<li>主线程处理耗时业务</li>
+<li>measure/layout，view被频繁创建移除，过多调用requestLayout，view层级太深（单次执行耗时+double taxation）</li>
+<li>draw，在onDraw执行耗时操作，创建小对象</li>
+<li>upload image，image太大超出必要尺寸</li>
+<li>issue commands，在draw的时候，小命令太多</li>
+<li>GPU，overdraw现象</li>
+</ul>
+<h2 id="耗时因素介绍"><a href="#耗时因素介绍" class="headerlink" title="耗时因素介绍"></a>耗时因素介绍</h2><h3 id="Double-Taxation"><a href="#Double-Taxation" class="headerlink" title="Double Taxation"></a>Double Taxation</h3><p>某些容器需要传递两次mearsure/layout才能最终确定布局，比如RelativeLayout，加了layout_weight的LinearLayout<br>这是系统默认行为，我们无法避免，只能尽量减少以下情况使用double taxation的容器  </p>
+<ol>
+<li>root view</li>
+<li>当前view下面有较深的层级</li>
+<li>listview/recyclerview的item</li>
+</ol>
+<h3 id="Overdraw"><a href="#Overdraw" class="headerlink" title="Overdraw"></a>Overdraw</h3><p>overdraw指在绘制同一帧时，一个屏幕像素点被重复绘制多次，这样会浪费GPU性能<br>可通过减少层级，或去掉不必要的背景色来缓解overdraw<br>比如，嵌套的LinearLayout可用RelativeLayout来代替</p>
+<blockquote>
+<p>看似double taxation和overdraw问题的处理方式上有些矛盾的地方，double taxation鼓励不用RelativeLayout，overdraw又鼓励用RelativeLayout…<br>这两者间有个权衡，如果是double taxation中提到的三种情况就不能用RelativeLayout，因为此时double taxation引起的问题更严重<br>如果是个层次不深且不会被频繁创建复用的view，尽量用RelativeLayout来减少层级  </p>
+</blockquote>
+<h3 id="Upload-Image"><a href="#Upload-Image" class="headerlink" title="Upload Image"></a>Upload Image</h3><p>如果当前页面图片太多，从CPU往GPU同步image内存时会较耗时<br>解决方法是，image大小尽量适配view的宽高，图片库在decode线程在decode完成后调用prepareToDraw，提前同步image到GPU</p>
+<h2 id="定位问题点"><a href="#定位问题点" class="headerlink" title="定位问题点"></a>定位问题点</h2><p><img src="/uploads/profile_gpu_rendering_graph_legend.png" alt></p>
+<p><img src="/uploads/screen_capture_render_indicator_brands.png" alt></p>
+<p>从图可以大致看出来在复用item的时候掉帧比较严重，掉了3帧以上<br>根据“GPU呈现模式分析”的条形图色段能大致看出各阶段的耗时程度，下面是具体耗时因素分析  </p>
+<ol>
+<li>Overdraw<br>打开设置中“调试GPU过度绘制”选项，如果红彤彤一大片，说明overdraw现象严重  <ul>
+<li>真彩色： 没有过度绘制</li>
+<li>蓝色： 过度绘制 1 次</li>
+<li>绿色： 过度绘制 2 次</li>
+<li>粉色： 过度绘制 3 次</li>
+<li>红色： 过度绘制 4 次或更多<br><img src="/uploads/screen_capture_overdraw_brands.png" alt></li>
+</ul>
+</li>
+<li>Measure/Layout  <ul>
+<li>通过Android Studio内置Layout Inspector查看布局结构，看看有没有可优化的层级嵌套（通过<merge>标签），以及是否存在严重double taxation的情况<br><img src="/uploads/screen_capture_layout_inspector_brands.png" alt></merge></li>
+<li>通过Hierarchy Viewer查看单个view节点measure/layout的耗时</li>
+</ul>
+</li>
+<li>CPU/Memory  <ul>
+<li>通过Android Studio内置Android Profiler进一步分析耗时方法以及查看是否存在内存抖动</li>
+</ul>
+</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://developer.android.com/training/improving-layouts/optimizing-layout.html" target="_blank" rel="noopener">https://developer.android.com/training/improving-layouts/optimizing-layout.html</a><br><a href="https://developer.android.com/topic/performance/rendering/optimizing-view-hierarchies.html" target="_blank" rel="noopener">https://developer.android.com/topic/performance/rendering/optimizing-view-hierarchies.html</a><br><a href="https://developer.android.com/topic/performance/rendering/profile-gpu.html" target="_blank" rel="noopener">https://developer.android.com/topic/performance/rendering/profile-gpu.html</a><br><a href="https://developer.android.com/topic/performance/rendering/overdraw.html" target="_blank" rel="noopener">https://developer.android.com/topic/performance/rendering/overdraw.html</a><br><a href="https://developer.android.com/studio/profile/hierarchy-viewer.html" target="_blank" rel="noopener">https://developer.android.com/studio/profile/hierarchy-viewer.html</a><br><a href="https://developer.android.com/studio/profile/inspect-gpu-rendering.html" target="_blank" rel="noopener">https://developer.android.com/studio/profile/inspect-gpu-rendering.html</a><br><a href="https://developer.android.com/studio/profile/cpu-profiler.html" target="_blank" rel="noopener">https://developer.android.com/studio/profile/cpu-profiler.html</a><br><a href="https://medium.com/google-developers/draw-what-you-see-and-clip-the-e11-out-of-the-rest-6df58c47873e" target="_blank" rel="noopener">https://medium.com/google-developers/draw-what-you-see-and-clip-the-e11-out-of-the-rest-6df58c47873e</a><br><a href="https://medium.com/google-developers/simplify-complex-view-hierarchies-5d358618b06f" target="_blank" rel="noopener">https://medium.com/google-developers/simplify-complex-view-hierarchies-5d358618b06f</a>  </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/performance/" rel="tag">#performance</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/30/android-studio/" rel="next" title="Android Studio使用小全">
+                <i class="fa fa-chevron-left"></i> Android Studio使用小全
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/uploads/me.jpg" alt="AndKid">
+          <p class="site-author-name" itemprop="name">AndKid</p>
+          <p class="site-description motion-element" itemprop="description">Try To Catch Up With Da Shen!</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/AndKid" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#发现问题"><span class="nav-number">1.</span> <span class="nav-text">发现问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#16-7ms内需要执行的任务"><span class="nav-number">2.</span> <span class="nav-text">16.7ms内需要执行的任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各阶段耗时因素"><span class="nav-number">3.</span> <span class="nav-text">各阶段耗时因素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#耗时因素介绍"><span class="nav-number">4.</span> <span class="nav-text">耗时因素介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Double-Taxation"><span class="nav-number">4.1.</span> <span class="nav-text">Double Taxation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Overdraw"><span class="nav-number">4.2.</span> <span class="nav-text">Overdraw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Upload-Image"><span class="nav-number">4.3.</span> <span class="nav-text">Upload Image</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定位问题点"><span class="nav-number">5.</span> <span class="nav-text">定位问题点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考链接"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndKid</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

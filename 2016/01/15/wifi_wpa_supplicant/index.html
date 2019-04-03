@@ -6,15 +6,15 @@
 
 
 <html class="theme-next mist use-motion">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -29,7 +29,7 @@
 
   
   
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -63,46 +63,39 @@
 
 
 
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="android,wifi," />
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="android,wifi,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1">
 
 
 
 
 
 
-<meta name="description" content="Wi-Fi WPA_Supplicantservice wpa_supplicant /system/bin/wpa_supplicant \
-    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
-    -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/m">
+<meta name="description" content="Wi-Fi WPA_Supplicantservice wpa_supplicant /system/bin/wpa_supplicant \     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \     -I/system/etc/wifi/wpa_supplicant_overlay.conf \     -O/data/m">
+<meta name="keywords" content="android,wifi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android Wi-Fi Supplicant">
 <meta property="og:url" content="http://andkid.github.io/2016/01/15/wifi_wpa_supplicant/index.html">
 <meta property="og:site_name" content="AndKid">
-<meta property="og:description" content="Wi-Fi WPA_Supplicantservice wpa_supplicant /system/bin/wpa_supplicant \
-    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
-    -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/m">
-<meta property="og:updated_time" content="2016-09-12T13:07:05.000Z">
+<meta property="og:description" content="Wi-Fi WPA_Supplicantservice wpa_supplicant /system/bin/wpa_supplicant \     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \     -I/system/etc/wifi/wpa_supplicant_overlay.conf \     -O/data/m">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-03T10:38:45.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Wi-Fi Supplicant">
-<meta name="twitter:description" content="Wi-Fi WPA_Supplicantservice wpa_supplicant /system/bin/wpa_supplicant \
-    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
-    -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/m">
+<meta name="twitter:description" content="Wi-Fi WPA_Supplicantservice wpa_supplicant /system/bin/wpa_supplicant \     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \     -I/system/etc/wifi/wpa_supplicant_overlay.conf \     -O/data/m">
 
 
 
@@ -149,7 +142,7 @@
   
 
   <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <span class="site-title">AndKid</span>
       <span class="logo-line-after"><i></i></span>
@@ -176,7 +169,7 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             首页
           </a>
@@ -186,7 +179,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             归档
           </a>
@@ -196,7 +189,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             标签
           </a>
@@ -327,10 +320,10 @@
 <p>src/drivers/driver.h    struct wpa_driver_scan_params</p>
 <p>// call wifi native to start the scan<br>        if (startScanNative(type, freqs)) {//传递了freqs频段<br>            …<br>        }</p>
 <p>wpa_s-&gt;manual_scan_freqs//指定手动设置的频段</p>
-<p>//触发驱动扫描<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wpa_supplicant_trigger_scan</div><div class="line">radio_add_work</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">WCNSS_qcom_cfg.ini</div><div class="line">#Preferred band (both or 2.4 only or 5 only)</div><div class="line">BandCapability=0</div></pre></td></tr></table></figure>
+<p>//触发驱动扫描<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wpa_supplicant_trigger_scan</span><br><span class="line">radio_add_work</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WCNSS_qcom_cfg.ini</span><br><span class="line">#Preferred band (both or 2.4 only or 5 only)</span><br><span class="line">BandCapability=0</span><br></pre></td></tr></table></figure>
 <p>WifiManager提供了扫描的参数的自定义接口，比如在ScanSettings添加一个freqMHz为5500的WifiChannel来过滤扫描结果</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">WifiManager.setFrequencyBand</div><div class="line"><span class="comment">/**</span></div><div class="line">     * Set the operational frequency band.</div><div class="line">     * <span class="doctag">@param</span> band  One of</div><div class="line">     *     &#123;<span class="doctag">@link</span> #WIFI_FREQUENCY_BAND_AUTO&#125;,0</div><div class="line">     *     &#123;<span class="doctag">@link</span> #WIFI_FREQUENCY_BAND_5GHZ&#125;,1</div><div class="line">     *     &#123;<span class="doctag">@link</span> #WIFI_FREQUENCY_BAND_2GHZ&#125;,2</div><div class="line">     * <span class="doctag">@param</span> persist &#123;<span class="doctag">@code</span> true&#125; if this needs to be remembered</div><div class="line">     * <span class="doctag">@hide</span></div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFrequencyBand</span><span class="params">(<span class="keyword">int</span> band, <span class="keyword">boolean</span> persist)</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            mService.setFrequencyBand(band, persist);</div><div class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123; &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">WifiManager.setFrequencyBand</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Set the operational frequency band.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> band  One of</span></span><br><span class="line"><span class="comment">     *     &#123;<span class="doctag">@link</span> #WIFI_FREQUENCY_BAND_AUTO&#125;,0</span></span><br><span class="line"><span class="comment">     *     &#123;<span class="doctag">@link</span> #WIFI_FREQUENCY_BAND_5GHZ&#125;,1</span></span><br><span class="line"><span class="comment">     *     &#123;<span class="doctag">@link</span> #WIFI_FREQUENCY_BAND_2GHZ&#125;,2</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> persist &#123;<span class="doctag">@code</span> true&#125; if this needs to be remembered</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@hide</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFrequencyBand</span><span class="params">(<span class="keyword">int</span> band, <span class="keyword">boolean</span> persist)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            mService.setFrequencyBand(band, persist);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RemoteException e) &#123; &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>android.config//wpa_supplicant宏控制开关,如EAP协议等</p>
 
       
@@ -422,7 +415,7 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
@@ -433,16 +426,14 @@
 
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/uploads/me.jpg"
-               alt="AndKid" />
+          <img class="site-author-image" itemprop="image" src="/uploads/me.jpg" alt="AndKid">
           <p class="site-author-name" itemprop="name">AndKid</p>
           <p class="site-description motion-element" itemprop="description">Try To Catch Up With Da Shen!</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">19</span>
+              <span class="site-state-item-count">20</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -452,7 +443,7 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -508,10 +499,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

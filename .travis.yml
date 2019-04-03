@@ -1,7 +1,7 @@
 language: node_js
 
-nod_js:
-  - '11'
+node_js:
+  - 'stable'
 
 sudo: false
 

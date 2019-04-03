@@ -46,7 +46,7 @@ https://github.com/getlantern/lantern
 ```yml
 language: node_js
 
-nod_js:
+node_js:
     - 'stable'
 
 sudo: false
